@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+if ARGV.empty?
+  puts "Usage: bin/sort ALGORITHM_NAME [SORT_FILE]"
+  puts "example 1: bin/sort bubble"
+  puts "example 2: bin/sort bubble data/random10k"
+  exit 0
+end
+
+require "benchmark"
+require_relative "../lib/sort/#{ARGV[0]}_sort"
+
+input = [*0...10].shuffle
+puts "Input : #{input}"
+puts "Output: #{sort(input)}"
+
+if ARGV[1]
+  input = File.read(ARGV[1]).lines.map(&:to_i)
+  Benchmark.bm do |x|
+    x.report { sort(input) }
+  end
+end
